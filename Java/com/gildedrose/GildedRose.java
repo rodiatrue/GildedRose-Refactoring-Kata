@@ -12,26 +12,14 @@ class GildedRose {
             if (!items[i].name.equals("Aged Brie")
                     && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                 if (items[i].quality > 0) {
-                    if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        decrementQuality(i);
-                    }
+                    applyQuality("Sulfuras, Hand of Ragnaros", i);
                 }
             } else {
-                if (items[i].quality < 50) {
-                    incrementQuality(i);
+                if (filterQuality(i, 50)) {
 
                     if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                incrementQuality(i);
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                incrementQuality(i);
-                            }
-                        }
+                        filterSellIn(i, 11, 50);
+                        filterSellIn(i, 6, 50);
                     }
                 }
             }
@@ -44,17 +32,13 @@ class GildedRose {
                 if (!items[i].name.equals("Aged Brie")) {
                     if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                         if (items[i].quality > 0) {
-                            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                                decrementQuality(i);
-                            }
+                            applyQuality("Sulfuras, Hand of Ragnaros", i);
                         }
                     } else {
                         resetQuality(i);
                     }
                 } else {
-                    if (items[i].quality < 50) {
-                        incrementQuality(i);
-                    }
+                    filterQuality(i, 50);
                 }
             }
         }
@@ -77,5 +61,30 @@ class GildedRose {
 
     private void resetQuality(int i)    {
         items[i].quality = items[i].quality - items[i].quality;
+    }
+
+    private void applyQuality(String name, int i)
+    {
+        if (!items[i].name.equals(name)) {
+            decrementQuality(i);
+        }
+    }
+
+    private boolean filterQuality(int i, int filter)
+    {
+        if (items[i].quality < filter) {
+            incrementQuality(i);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void filterSellIn(int i, int filter, int filterForQuality)
+    {
+        if (items[i].sellIn < filter) {
+            filterQuality(i, filterForQuality);
+        }
     }
 }
