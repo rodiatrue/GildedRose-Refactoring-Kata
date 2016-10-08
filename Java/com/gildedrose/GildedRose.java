@@ -9,16 +9,11 @@ class GildedRose {
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
-            if (!(items[i].name.equals("Aged Brie")
-                    || items[i].name.equals("Backstage passes to a TAFKAL80ETC concert"))) {
+            if (!items[i].name.equals("Aged Brie")
+                    && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                 applyNegativeQuality(0, "Sulfuras, Hand of Ragnaros", i);
             } else {
-                if (filterQuality(i, 50)) {
-                    if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        filterSellIn(i, 11, 50);
-                        filterSellIn(i, 6, 50);
-                    }
-                }
+                buildFilter("Backstage passes to a TAFKAL80ETC concert", i, 11, 6, 50);
             }
 
             filterDecrementSellIn("Sulfuras, Hand of Ragnaros", i);
@@ -92,6 +87,21 @@ class GildedRose {
     {
         if (!items[i].name.equals(name)) {
             decrementSellIn(i);
+        }
+    }
+
+    private void applyPositiveQualty(String name, int i, int sellInFist, int sellInSecond, int filter)
+    {
+        if (items[i].name.equals(name)) {
+            filterSellIn(i, sellInFist, filter);
+            filterSellIn(i, sellInSecond, filter);
+        }
+    }
+
+    private void buildFilter(String name, int i, int sellInFist, int sellInSecond, int filter)
+    {
+        if (filterQuality(i, filter)) {
+            applyPositiveQualty(name, i, sellInFist, sellInSecond, filter);
         }
     }
 }
