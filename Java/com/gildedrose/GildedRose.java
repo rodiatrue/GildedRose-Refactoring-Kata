@@ -90,8 +90,7 @@ class GildedRose {
     {
         boolean value = false;
 
-        if (!items[i].name.equals(name)
-                && !items[i].name.equals(nameFiltered)) {
+        if (!items[i].name.equals(name) && !items[i].name.equals(nameFiltered)) {
             applyNegativeQuality(filter, nameParameter, i);
             value = true;
         }
