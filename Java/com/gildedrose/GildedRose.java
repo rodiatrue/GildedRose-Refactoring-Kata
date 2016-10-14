@@ -9,13 +9,7 @@ class GildedRose {
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
-            createFilters("Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros", 0, 11, 6, 50, i);
-
-            filterDecrementSellIn("Sulfuras, Hand of Ragnaros", i);
-
-            if (items[i].sellIn < 0) {
-                buildFilters("Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros", 0, 50, i);
-            }
+            initFilters("Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros", 0, 11, 6, 50, i);
         }
     }
 
@@ -125,6 +119,17 @@ class GildedRose {
     {
         if (!filterTwoCases(name, nameFiltered, nameSecondFiltered, filter, i)) {
             buildFilter(nameFiltered, i, secondFilter, thirdFilter, fourthFilter);
+        }
+    }
+
+    private void initFilters(String name, String nameFiltered, String nameSecondFiltered, int filter, int secondFilter, int thirdFilter, int fourthFilter, int i)
+    {
+        createFilters(name, nameFiltered, nameSecondFiltered, filter, secondFilter, thirdFilter, fourthFilter, i);
+
+        filterDecrementSellIn(nameSecondFiltered, i);
+
+        if (items[i].sellIn < 0) {
+            buildFilters(name, nameFiltered, nameSecondFiltered, filter, fourthFilter, i);
         }
     }
 }
