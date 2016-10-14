@@ -9,25 +9,12 @@ class GildedRose {
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Aged Brie")
-                    && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                applyNegativeQuality(0, "Sulfuras, Hand of Ragnaros", i);
-            } else {
-                buildFilter("Backstage passes to a TAFKAL80ETC concert", i, 11, 6, 50);
-            }
+            createFilters("Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros", 0, 11, 6, 50, i);
 
             filterDecrementSellIn("Sulfuras, Hand of Ragnaros", i);
 
             if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Aged Brie")) {
-                    if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        applyNegativeQuality(0, "Sulfuras, Hand of Ragnaros", i);
-                    } else {
-                        resetQuality(i);
-                    }
-                } else {
-                    filterQuality(i, 50);
-                }
+                buildFilters("Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros", 0, 50, i);
             }
         }
     }
@@ -102,6 +89,42 @@ class GildedRose {
     {
         if (filterQuality(i, filter)) {
             applyPositiveQualty(name, i, sellInFist, sellInSecond, filter);
+        }
+    }
+
+    private boolean filterTwoCases(String name, String nameFiltered, String nameParameter, int filter, int i)
+    {
+        boolean value = false;
+
+        if (!items[i].name.equals(name)
+                && !items[i].name.equals(nameFiltered)) {
+            applyNegativeQuality(filter, nameParameter, i);
+            value = true;
+        }
+
+        return value;
+    }
+
+    private void decideByFilter(String name, String nameFiltered, int filter, int i)
+    {
+        if (!items[i].name.equals(name) && items[i].name.equals(nameFiltered)) {
+            resetQuality(i);
+        } else {
+            filterQuality(i, filter);
+        }
+    }
+
+    private void buildFilters(String name, String nameFiltered, String nameSecondFiltered, int filter, int secondFilter, int i)
+    {
+        if (!filterTwoCases(name, nameFiltered, nameSecondFiltered, filter, i)) {
+            decideByFilter(name, nameFiltered, secondFilter, i);
+        }
+    }
+
+    private void createFilters(String name, String nameFiltered, String nameSecondFiltered, int filter, int secondFilter, int thirdFilter, int fourthFilter, int i)
+    {
+        if (!filterTwoCases(name, nameFiltered, nameSecondFiltered, filter, i)) {
+            buildFilter(nameFiltered, i, secondFilter, thirdFilter, fourthFilter);
         }
     }
 }
